@@ -1,0 +1,45 @@
+
+
+def get_weather_data(location):
+    # Construct the API request URL
+    request_url = f"{BASE_URL}?q={location}&appid={API_KEY}&units=metric"
+
+    # Send a GET request to the API
+    response = requests.get(request_url)
+
+    # Check if the response is valid
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        print("Error fetching data. Please check the location and try again.")
+        return None
+
+def display_weather_data(data):
+    if data:
+        # Extract and display relevant weather information
+        temperature = data['main']['temp']
+        weather_condition = data['weather'][0]['description']
+        humidity = data['main']['humidity']
+        wind_speed = data['wind']['speed']
+
+        print(f"Weather in {data['name']}:")
+        print(f"Temperature: {temperature}°C")
+        print(f"Condition: {weather_condition.capitalize()}")
+        print(f"Humidity: {humidity}%")
+        print(f"Wind Speed: {wind_speed} m/s")
+    else:
+        print("No data to display.")
+
+def main():
+    # Prompt the user to enter a location
+    location = input("Enter the city name: ")
+
+    # Fetch weather data for the specified location
+    weather_data = get_weather_data(location)
+
+    # Display the fetched weather data
+    display_weather_data(weather_data)
+
+if __name__ == "__main__":
+    main()
